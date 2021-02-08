@@ -1,0 +1,27 @@
+<ion-header [translucent]="true">
+  <ion-toolbar>
+    <ion-buttons>
+      <ion-back-button text="User Profiles" defaultHref="/"></ion-back-button>
+    </ion-buttons>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content [fullscreen]="true" *ngIf="user">
+  <ion-item lines="none">
+    First Name: {{ user.firstName }}
+  </ion-item>
+  <ion-item lines="none">
+    Last Name: {{ user.lastName }}
+  </ion-item>
+  <ion-item lines="none">
+    Birthday: {{ user.birthday | date }}
+  </ion-item>
+  <ion-item lines="none">
+    Sex: {{ Gender[user.sex] }}
+  </ion-item>
+  <ion-item>
+    <ion-button (click)="onUserEdit()" color="primary">
+      <ion-icon name="create-outline"></ion-icon>
+    </ion-button>
+  </ion-item>
+</ion-content>

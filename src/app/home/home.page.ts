@@ -1,4 +1,5 @@
 import { Component } from '@angular/core';
+import { UsersService, User } from '../services/users.service';
 
 @Component({
   selector: 'app-home',
@@ -7,6 +8,10 @@ import { Component } from '@angular/core';
 })
 export class HomePage {
 
-  constructor() {}
+  constructor(private usersService: UsersService) {}
+
+  getUsers(): User[] {
+    return this.usersService.getUsers();
+  }
 
 }
