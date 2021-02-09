@@ -1,0 +1,28 @@
+<ion-header>
+  <ion-toolbar>
+    <ion-title>Edit User</ion-title>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content>
+  <form [formGroup]="userForm" (ngSubmit)="onSubmit()">
+    <ion-item>
+      <ion-label>First Name</ion-label>
+      <ion-input type="text" formControlName="firstName"></ion-input>
+    </ion-item>
+    <ion-item>
+      <ion-label>Last Name</ion-label>
+      <ion-input type="text" formControlName="lastName"></ion-input>
+    </ion-item>
+    <ion-item>
+      <ion-label>Birthday</ion-label>
+      <ion-input type="text" formControlName="birthday"></ion-input>
+    </ion-item>
+    <ion-item>
+      <ion-label>Sex</ion-label>
+      <ion-input type="text" formControlName="sex"></ion-input>
+    </ion-item>
+    <ion-button expand="block" type="submit" [disabled]="!userForm.valid">Submit</ion-button>
+    <ion-button expand="block" color="medium" (click)="onCancel()">Cancel</ion-button>
+  </form>
+</ion-content>

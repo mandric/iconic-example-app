@@ -1,10 +1,19 @@
 <ion-header [translucent]="true">
   <ion-toolbar>
     <ion-buttons>
-      <ion-back-button text="User Profiles" defaultHref="/"></ion-back-button>
+        <ion-button [routerLink]="'/'">
+          <ion-icon slot="start" name="arrow-back-outline"></ion-icon>
+          User Profiles
+        </ion-button>
     </ion-buttons>
   </ion-toolbar>
 </ion-header>
+
+<ion-content *ngIf="!user">
+  <ion-item lines="none">
+    User not found.
+  </ion-item>
+</ion-content>
 
 <ion-content [fullscreen]="true" *ngIf="user">
   <ion-item lines="none">
@@ -19,9 +28,7 @@
   <ion-item lines="none">
     Sex: {{ Gender[user.sex] }}
   </ion-item>
-  <ion-item>
-    <ion-button (click)="onUserEdit()" color="primary">
-      <ion-icon name="create-outline"></ion-icon>
+    <ion-button [routerLink]="['/user', user.id, 'edit']" color="primary" expand="full">
+      <ion-icon name="create-outline"></ion-icon>Edit
     </ion-button>
-  </ion-item>
 </ion-content>

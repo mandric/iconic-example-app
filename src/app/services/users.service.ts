@@ -52,20 +52,35 @@ export class UsersService {
 
   constructor() { }
 
-  public deleteUser(id: number): User {
-    for (const i in this.users) {
-      if (this.users[i].id === id) {
-        return this.users.splice(parseInt(i,10), 1)[0];
-      }
+  public deleteUser(id: number): boolean {
+    let length = this.users.length;
+    this.users = this.users.filter(u => u.id !== id);
+    return this.users.length !== length;
+  }
+
+  public updateUser(user: User): boolean {
+    if (typeof user.birthday === 'string') {
+      user.birthday = new Date(user.birthday);
     }
-    //return this.users.(user => user.id === id);
+    let success = false;
+    this.users = this.users.map(u => {
+      if (u.id === user.id) {
+        success = true;
+        return user;
+      }
+      return u;
+    });
+    return success;
   }
 
   public getUsers(): User[] {
     return this.users;
   }
 
-  public getUserById(id: number): User {
+  public getUserById(id: number | string): User {
+    if (typeof id === 'string') {
+      id = parseInt(id, 10);
+    }
     return this.users.find(user => user.id === id);
   }
 }

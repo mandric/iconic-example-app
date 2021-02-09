@@ -1,5 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
+
 import { UsersService, User, Gender } from '../services/users.service';
 
 @Component({
@@ -8,20 +9,18 @@ import { UsersService, User, Gender } from '../services/users.service';
   styleUrls: ['./view-user.page.scss'],
 })
 export class ViewUserPage implements OnInit {
-  public user: User;
-  public readonly Gender = Gender;
+  private user: User;
+  private readonly Gender = Gender;
 
   constructor(
     private usersService: UsersService,
-    private activatedRoute: ActivatedRoute
-  ) { }
+    private activatedRoute: ActivatedRoute,
+  ) {}
 
-  ngOnInit() {
+  ngOnInit() {}
+
+  ionViewWillEnter() {
     const id = this.activatedRoute.snapshot.paramMap.get('id');
-    this.user = this.usersService.getUserById(parseInt(id, 10));
-  }
-
-  onUserEdit() {
-    console.log('onUserEdit', this.user);
+    this.user = this.usersService.getUserById(id);
   }
 }
