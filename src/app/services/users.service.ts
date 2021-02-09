@@ -19,7 +19,7 @@ export interface User {
   providedIn: 'root'
 })
 export class UsersService {
-  public users: User[] = [
+  private users: User[] = [
     {
       id: 1,
       firstName: 'Matt',
@@ -52,13 +52,13 @@ export class UsersService {
 
   constructor() { }
 
-  public deleteUser(id: number): boolean {
+  deleteUser(id: number): boolean {
     let length = this.users.length;
     this.users = this.users.filter(u => u.id !== id);
     return this.users.length !== length;
   }
 
-  public updateUser(user: User): boolean {
+  updateUser(user: User): boolean {
     if (typeof user.birthday === 'string') {
       user.birthday = new Date(user.birthday);
     }
@@ -73,11 +73,11 @@ export class UsersService {
     return success;
   }
 
-  public getUsers(): User[] {
+  getUsers(): User[] {
     return this.users;
   }
 
-  public getUserById(id: number | string): User {
+  getUserById(id: number | string): User {
     if (typeof id === 'string') {
       id = parseInt(id, 10);
     }
