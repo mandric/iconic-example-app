@@ -16,6 +16,13 @@
   </ion-header>
   
   <ion-list>
+    <ion-item *ngFor="let item of filterForm">
+      <ion-label>{{item.label}}</ion-label>
+      <ion-checkbox slot="end" [(ngModel)]="item.isChecked" (ngModelChange)="onFilterChange($event)"></ion-checkbox>
+    </ion-item>
     <app-user *ngFor="let user of getUsers()" [user]="user"></app-user>
+    <ion-item *ngIf="users.length === 0">
+      No users found.
+    </ion-item>
   </ion-list>
 </ion-content>
