@@ -7,6 +7,12 @@ interface FilterInput {
   isChecked: boolean
 }
 
+interface AgeStats {
+  oldest: number,
+  youngest: number,
+  average: number
+}
+
 @Component({
   selector: 'app-home',
   templateUrl: 'home.page.html',
@@ -14,6 +20,7 @@ interface FilterInput {
 })
 export class HomePage {
 
+  stats: AgeStats;
   users: User[] = [];
   filterForm: FilterInput[] = [];
 
@@ -33,6 +40,37 @@ export class HomePage {
 
   init() {
     this.users = this.getUsers();
+    this.stats = this.getStats(this.users);
+  }
+
+  getStats(users: User[]): AgeStats {
+    if (!users.length) {
+      return;
+    }
+    let count = 0;
+    let total = 0;
+    let oldest = users[0].birthday;
+    let youngest = users[0].birthday;
+    for (const u of users) {
+      count++;
+      total += u.birthday.valueOf();
+      if (u.birthday < oldest) {
+        oldest = u.birthday;
+      } else if (u.birthday > youngest) {
+        youngest = u.birthday;
+      }
+    }
+    return {
+      oldest: this.getAge(oldest),
+      youngest: this.getAge(youngest),
+      average: this.getAge(new Date(Math.round(total/count)))
+    }
+  }
+
+  getAge(birthday: Date): number {
+    const now = new Date();
+    const diff = new Date(now.valueOf() - birthday.valueOf());
+    return Math.abs(diff.getUTCFullYear() - 1970);
   }
 
   getUsers(): User[] {
@@ -46,6 +84,12 @@ export class HomePage {
       return genders.has(u.sex);
     };
     return this.usersService.getUsers().filter(filter);
+  }
+
+  onUserDelete(id: number) {
+    if (this.usersService.deleteUser(id)) {
+      this.init();
+    };
   }
 
   onFilterChange() {
