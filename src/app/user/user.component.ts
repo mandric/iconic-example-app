@@ -1,5 +1,5 @@
 import { Component, OnInit, Input, EventEmitter, Output } from '@angular/core';
-import { User, Gender, UsersService } from '../services/users.service';
+import { User, Gender } from '../services/users.service';
 
 @Component({
   selector: 'app-user',
@@ -12,14 +12,11 @@ export class UserComponent implements OnInit {
 
   public readonly Gender = Gender;
 
-  constructor(
-    private usersService: UsersService,
-  ) { }
+  constructor() { }
 
   ngOnInit() {}
 
   onUserDelete(ev: MouseEvent) {
-    ev.preventDefault();
     this.deleted.emit();
   }
 }
