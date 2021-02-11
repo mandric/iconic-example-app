@@ -104,9 +104,14 @@ export class HomePage {
     this.init();
   }
 
-  async loadMockData() {
-    await this.usersService.loadMockData();
-    window.location.reload();
+  loadMockData() {
+    this.usersService.loadMockData()
+      .then(() => window.location.reload())
+      .catch(e => {
+        alert(e);
+        console.error(e);
+        window.location.reload();
+      })
   }
 
 }

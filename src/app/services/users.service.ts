@@ -62,16 +62,9 @@ export class UsersService {
   constructor(private storage: Storage) {}
 
   loadMockData(): Promise<any> {
-    const calls = [];
-    for (const u of this.mockUsers) {
-      calls.push(
-        this.storage.set(this.userKey(u.id), u).catch(e => {
-          alert(e);
-          console.error(e);
-        })
-      );
-    }
-    return Promise.all(calls);
+    return Promise.all(
+      this.mockUsers.map(u => this.storage.set(this.userKey(u.id), u))
+    );
   }
 
   userKey(id: number) {
