@@ -39,8 +39,10 @@ export class HomePage {
   }
 
   init() {
-    this.users = this.getUsers();
-    this.stats = this.getStats(this.users);
+    this.usersService.getUsers().then(users => {
+      this.users = this.filteredUsers(users);
+      this.stats  = this.getStats(this.users);
+    });
   }
 
   getStats(users: User[]): AgeStats {
@@ -53,7 +55,7 @@ export class HomePage {
     let youngest = users[0].birthday;
     for (const u of users) {
       count++;
-      total += u.birthday.valueOf();
+      total += new Date(u.birthday).valueOf();
       if (u.birthday < oldest) {
         oldest = u.birthday;
       } else if (u.birthday > youngest) {
@@ -67,13 +69,16 @@ export class HomePage {
     }
   }
 
-  getAge(birthday: Date): number {
+  getAge(birthday: Date | string): number {
+    if (typeof birthday === 'string') {
+      birthday = new Date(birthday);
+    }
     const now = new Date();
     const diff = new Date(now.valueOf() - birthday.valueOf());
     return Math.abs(diff.getUTCFullYear() - 1970);
   }
 
-  getUsers(): User[] {
+  filteredUsers(users: User[]): User[] {
     const genders = new Map();
     for (const f of this.filterForm) {
       if (f.isChecked) {
@@ -83,17 +88,25 @@ export class HomePage {
     const filter = (u: User) => {
       return genders.has(u.sex);
     };
-    return this.usersService.getUsers().filter(filter);
+    return users.filter(filter);
   }
 
   onUserDelete(id: number) {
-    if (this.usersService.deleteUser(id)) {
-      this.init();
-    };
+    this.usersService.deleteUser(id)
+      .then(() => this.init())
+      .catch(e => {
+        alert(e);
+        console.error(e);
+      });
   }
 
   onFilterChange() {
     this.init();
+  }
+
+  async loadMockData() {
+    await this.usersService.loadMockData();
+    window.location.reload();
   }
 
 }

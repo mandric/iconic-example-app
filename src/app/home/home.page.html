@@ -21,13 +21,17 @@
       <ion-checkbox slot="end" [(ngModel)]="item.isChecked" (ngModelChange)="onFilterChange($event)"></ion-checkbox>
     </ion-item>
     <ion-item *ngIf="users.length === 0">
-      No users found.
+      No users found. <ion-button slot="end" color="warning" (click)="loadMockData()">Load mock data?</ion-button>
     </ion-item>
     <ion-item *ngIf="users.length !== 0">
       <ion-chip *ngFor="let stat of stats | keyvalue">
         <ion-label>{{ stat.key }}: {{ stat.value }}</ion-label>
       </ion-chip>
     </ion-item>
-    <app-user *ngFor="let user of getUsers()" [user]="user" (deleted)="onUserDelete(user.id)"></app-user>
+    <app-user *ngFor="let user of filteredUsers(users)" [user]="user" (deleted)="onUserDelete(user.id)"></app-user>
   </ion-list>
 </ion-content>
+
+<ion-footer>
+  Tip: Slide items to left to reveal delete button. 
+</ion-footer>

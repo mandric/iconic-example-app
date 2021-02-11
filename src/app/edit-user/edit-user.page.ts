@@ -10,7 +10,7 @@ import { Gender, User, UsersService } from '../services/users.service';
   styleUrls: ['./edit-user.page.scss'],
 })
 export class EditUserPage implements OnInit {
-  public user: User;
+  private user: User;
   private userForm: FormGroup;
   public readonly Gender = Gender;
 
@@ -23,13 +23,12 @@ export class EditUserPage implements OnInit {
   ) {}
 
   ngOnInit() {
-    const id = this.route.snapshot.paramMap.get('id');
-    this.user = this.usersService.getUserById(id);
+    this.user = this.route.snapshot.data['user'];
     this.userForm = this.formBuilder.group({
       firstName: [this.user.firstName, Validators.required],
       lastName: [this.user.lastName, Validators.required],
       sex: [this.user.sex, Validators.required],
-      birthday: [this.user.birthday?.toISOString(), Validators.required]
+      birthday: [this.user.birthday, Validators.required]
     });
   }
 
@@ -39,11 +38,12 @@ export class EditUserPage implements OnInit {
 
   onSubmit() {
     const data = Object.assign(this.userForm.value, {id: this.user.id});
-    if (this.usersService.updateUser(data)) {
-      this.routeToUserView();
-    } else {
-      alert('update failed');
-    };
+    this.usersService.updateUser(data)
+      .then(() => this.routeToUserView())
+      .catch(e => {
+        console.error('update failed', e);
+        alert('update failed');
+      })
   }
 
   onCancel() {
