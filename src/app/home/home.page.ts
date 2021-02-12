@@ -21,8 +21,8 @@ interface AgeStats {
 })
 export class HomePage {
 
+  users: User[];
   stats: AgeStats;
-  users: User[] = [];
   filterForm: FilterInput[] = [];
 
   constructor(private router: Router, private usersService: UsersService) {
@@ -79,7 +79,7 @@ export class HomePage {
     return Math.abs(diff.getFullYear() - 1970);
   }
 
-  filteredUsers(users: User[]): User[] {
+  filteredUsers(users: User[] = []): User[] {
     const genders = new Map();
     for (const f of this.filterForm) {
       if (f.isChecked) {

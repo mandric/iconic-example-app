@@ -20,10 +20,10 @@
       <ion-label>{{item.label}}</ion-label>
       <ion-checkbox slot="end" [(ngModel)]="item.isChecked" (ngModelChange)="onFilterChange($event)"></ion-checkbox>
     </ion-item>
-    <ion-item *ngIf="users.length === 0">
+    <ion-item *ngIf="users?.length === 0">
       No users found. <ion-button slot="end" color="warning" (click)="loadMockData()">Load mock data?</ion-button>
     </ion-item>
-    <ion-item *ngIf="users.length !== 0">
+    <ion-item *ngIf="users?.length !== 0">
       <ion-chip *ngFor="let stat of stats | keyvalue">
         <ion-label>{{ stat.key }}: {{ stat.value }}</ion-label>
       </ion-chip>
