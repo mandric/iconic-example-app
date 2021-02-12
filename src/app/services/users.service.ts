@@ -20,50 +20,58 @@ export interface User {
   providedIn: 'root'
 })
 export class UsersService {
-  private keyPrefix = 'users';
+  private seq = 1;
+  private readonly seqKey: string;
+  private readonly keyPrefix = 'users';
+
   public readonly mockUsers: User[] = [
     {
       id: 1,
       firstName: 'Matt',
       lastName: 'Leguizamo',
       sex: 'M' as Gender,
-      birthday: '1999-10-10T00:00:00.000Z'
+      birthday: '1999-10-10'
     },
     {
       id: 2,
       firstName: 'John',
       lastName: 'Wayne',
       sex: 'M' as Gender,
-      birthday: '1989-01-30T00:00:00.000Z'
+      birthday: '1989-01-30'
     },
     {
       id: 3,
       firstName: 'Sally',
       lastName: 'McFredrick',
       sex: 'F' as Gender,
-      birthday: '1976-06-03T00:00:00.000Z'
+      birthday: '1976-06-03'
     },
     {
       id: 4,
       firstName: 'Pat',
       lastName: 'Orielly',
       sex: 'F' as Gender,
-      birthday: '1956-11-22T00:00:00.000Z'
+      birthday: '1956-11-22'
     },
     {
       id: 5,
       firstName: 'Samantha',
       lastName: 'Smith',
       sex: 'O' as Gender,
-      birthday: '1936-12-02T00:00:00.000Z'
+      birthday: '1936-12-02'
     }
   ];
 
-  constructor(private storage: Storage) {}
+  constructor(private storage: Storage) {
+    this.seqKey = `${this.keyPrefix}-seq`;
+    this.storage.get(this.seqKey).then(seq => {
+      this.seq = seq ? seq : this.seq;
+    });
+  }
 
   loadMockData(): Promise<any> {
     return Promise.all(
-      this.mockUsers.map(u => this.storage.set(this.userKey(u.id), u))
+      this.mockUsers.map(u => this.createUser(u))
     );
   }
 
@@ -75,13 +83,26 @@ export class UsersService {
     return this.storage.remove(this.userKey(id));
   }
 
+  createUser(user: User): Promise<[User,any]> {
+    const id = user.id || ++this.seq;
+    user.id = id;
+    if (id > this.seq) {
+      this.seq = id;
+    }
+    return Promise.all([
+      this.storage.set(this.userKey(id), user),
+      this.storage.set(this.seqKey, this.seq)
+    ]);
+  }
+
   updateUser(user: User): Promise<User> {
     return this.storage.set(this.userKey(user.id), user);
   }
 
-  async getUsers(): Promise<User[]> {
-    const keys = await this.storage.keys();
-    return Promise.all(keys.map(k => this.storage.get(k)));
+  getUsers(): Promise<User[]> {
+    return this.storage.keys().then(keys => {
+      return Promise.all(keys.map(k => this.storage.get(k)));
+    });
   }
 
   getUserById(id: number | string): Promise<User> {

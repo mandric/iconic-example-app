@@ -1,4 +1,5 @@
 import { Component } from '@angular/core';
+import { Router } from '@angular/router';
 import { UsersService, User, Gender } from '../services/users.service';
 
 interface FilterInput {
@@ -24,7 +25,7 @@ export class HomePage {
   users: User[] = [];
   filterForm: FilterInput[] = [];
 
-  constructor(private usersService: UsersService) {
+  constructor(private router: Router, private usersService: UsersService) {
     for (const g in Gender) {
       this.filterForm.push({
         label: Gender[g],
@@ -112,6 +113,10 @@ export class HomePage {
         console.error(e);
         window.location.reload();
       })
+  }
+
+  fabAdd(){
+    this.router.navigate(['/user/new']);
   }
 
 }

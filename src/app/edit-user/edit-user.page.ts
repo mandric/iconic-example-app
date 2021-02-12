@@ -24,29 +24,57 @@ export class EditUserPage implements OnInit {
 
   ngOnInit() {
     this.user = this.route.snapshot.data['user'];
-    this.userForm = this.formBuilder.group({
-      firstName: [this.user.firstName, Validators.required],
-      lastName: [this.user.lastName, Validators.required],
-      sex: [this.user.sex, Validators.required],
-      birthday: [this.user.birthday, Validators.required]
-    });
+    if (this.user) {
+      this.userForm = this.formBuilder.group({
+        firstName: [this.user.firstName, Validators.required],
+        lastName: [this.user.lastName, Validators.required],
+        sex: [this.user.sex, Validators.required],
+        birthday: [this.user.birthday, Validators.required]
+      });
+    } else {
+      this.userForm = this.formBuilder.group({
+        firstName: ['', Validators.required],
+        lastName: ['', Validators.required],
+        sex: ['', Validators.required],
+        birthday: ['', Validators.required]
+      });
+    }
   }
 
-  routeToUserView() {
-    this.router.navigate(['/user', this.user.id]);
+  routeToUserView(user = this.user) {
+    this.router.navigate(['/user', user.id]);
+  }
+
+  routeToHome() {
+    this.router.navigate(['/home']);
+  }
+
+  onError(e) {
+    console.error('update failed', e);
+    alert('update failed');
   }
 
   onSubmit() {
-    const data = Object.assign(this.userForm.value, {id: this.user.id});
-    this.usersService.updateUser(data)
-      .then(() => this.routeToUserView())
-      .catch(e => {
-        console.error('update failed', e);
-        alert('update failed');
-      })
+    const data = Object.assign(
+      this.userForm.value,
+      this.user ? {id: this.user.id} : {}
+    );
+    if (this.user) {
+      this.usersService.updateUser(data)
+        .then(() => this.routeToUserView())
+        .catch(this.onError)
+    } else {
+      this.usersService.createUser(data)
+        .then(ret => this.routeToUserView(ret[0]))
+        .catch(this.onError)
+    }
   }
 
   onCancel() {
-    this.routeToUserView();
+    if (this.user) {
+      this.routeToUserView();
+    } else {
+      this.routeToHome();
+    }
   }
 }

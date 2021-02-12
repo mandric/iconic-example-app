@@ -30,6 +30,11 @@
     </ion-item>
     <app-user *ngFor="let user of filteredUsers(users)" [user]="user" (deleted)="onUserDelete(user.id)"></app-user>
   </ion-list>
+  <ion-fab vertical="bottom" horizontal="end" slot="fixed">
+    <ion-fab-button (click)="fabAdd()">
+      <ion-icon name="add"></ion-icon>
+    </ion-fab-button>
+  </ion-fab>
 </ion-content>
 
 <ion-footer>

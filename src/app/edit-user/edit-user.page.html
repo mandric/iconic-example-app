@@ -1,6 +1,7 @@
 <ion-header>
   <ion-toolbar>
-    <ion-title>Edit User</ion-title>
+    <ion-title *ngIf="user">Edit User</ion-title>
+    <ion-title *ngIf="!user">Create New User</ion-title>
   </ion-toolbar>
 </ion-header>
 
@@ -16,11 +17,11 @@
     </ion-item>
     <ion-item>
       <ion-label>Birthday</ion-label>
-      <ion-input type="text" formControlName="birthday"></ion-input>
+      <ion-input type="text" placeholder="YYYY-MM-DD" formControlName="birthday"></ion-input>
     </ion-item>
     <ion-item>
       <ion-label>Sex</ion-label>
-      <ion-input type="text" formControlName="sex"></ion-input>
+      <ion-input type="text" placeholder="M,F,O" formControlName="sex"></ion-input>
     </ion-item>
     <ion-button expand="block" type="submit" [disabled]="!userForm.valid">Submit</ion-button>
     <ion-button expand="block" color="medium" (click)="onCancel()">Cancel</ion-button>

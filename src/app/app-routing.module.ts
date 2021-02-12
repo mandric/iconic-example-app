@@ -7,6 +7,10 @@ const routes: Routes = [
     loadChildren: () => import('./home/home.module').then(m => m.HomePageModule)
   },
   {
+    path: 'user/new',
+    loadChildren: () => import('./edit-user/edit-user.module').then( m => m.EditUserPageModule)
+  },
+  {
     path: 'user/:id',
     loadChildren: () => import('./view-user/view-user.module').then(m => m.ViewUserPageModule)
   },
