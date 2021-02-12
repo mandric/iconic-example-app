@@ -76,7 +76,7 @@ export class HomePage {
     }
     const now = new Date();
     const diff = new Date(now.valueOf() - birthday.valueOf());
-    return Math.abs(diff.getUTCFullYear() - 1970);
+    return Math.abs(diff.getFullYear() - 1970);
   }
 
   filteredUsers(users: User[]): User[] {
