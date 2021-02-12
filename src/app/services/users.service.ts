@@ -13,7 +13,7 @@ export interface User {
   firstName: string;
   lastName: string;
   sex: Gender;
-  birthday: string;
+  birthday: string; // valid ISO 8601 datetime string
 }
 
 @Injectable({

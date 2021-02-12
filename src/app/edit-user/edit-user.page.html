@@ -17,11 +17,13 @@
     </ion-item>
     <ion-item>
       <ion-label>Birthday</ion-label>
-      <ion-input type="text" pattern="\d\d\d\d-\d\d-\d\d" placeholder="YYYY-MM-DD" formControlName="birthday"></ion-input>
+      <ion-datetime formControlName="birthday" displayFormat="MMM DD, YYYY" [value]="user?.birthday" min="1000"></ion-datetime>
     </ion-item>
     <ion-item>
       <ion-label>Sex</ion-label>
-      <ion-input type="text" pattern="M|F|O" placeholder="M,F,O" formControlName="sex"></ion-input>
+      <ion-select formControlName="sex" [value]="user?.sex">
+        <ion-select-option *ngFor="let g of Gender | keyvalue" [value]="g.key">{{ g.value }}</ion-select-option>
+      </ion-select>
     </ion-item>
     <ion-button expand="block" type="submit" [disabled]="!userForm.valid">Submit</ion-button>
     <ion-button expand="block" color="medium" (click)="onCancel()">Cancel</ion-button>
